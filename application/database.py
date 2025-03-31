@@ -31,5 +31,10 @@ class Event(Base):
     end_date = Column(Date, nullable="False")
     location = Column(String, nullable="False")
 
+class Speaker(Base):
+    __tablename__ = "speaker_info"
+    name = Column(String, nullable="False")
+    bio = Column(String, nullable="False")
+    contact_info = Column(String, nullable="False")
 
 Base.metadata.create_all(engine)
