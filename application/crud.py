@@ -1,18 +1,21 @@
-from typing import Optional
-from pydantic import BaseModel
+from datetime import date
+from typing import Optional, Annotated
+from pydantic import BaseModel, EmailStr, field_validator, Field, ConfigDict
+import re
 from datetime import datetime
+from sqlalchemy.orm import Session
+from database import SessionLocal, User, Event, Speaker, Session, Participant, Budget
 
+class BaseModelScheme(BaseModel):
+    id: int
 
-
-class User(BaseModel):
+class UserScheme(BaseModelScheme):
     username: str
     email: str
-    full_name: Optional[str] = None
-    disabled: Optional[bool] = None
+    full_name: str
+    is_admin: bool
 
-
-class Event(BaseModel):
-    id: int
+class EventScheme(BaseModelScheme):
     title: str
     description: str
     start_date: datetime
@@ -20,8 +23,7 @@ class Event(BaseModel):
     location: str
     organizer_id: int
 
-class Session(BaseModel):
-    id: int
+class SessionScheme(BaseModelScheme):
     event_id: int
     title: str
     description: str
@@ -29,24 +31,23 @@ class Session(BaseModel):
     end_time: datetime
     speaker_id: int
 
-class Speaker(BaseModel):
-    id: int
+class SpeakerScheme(BaseModelScheme):
     name: str
     bio: str
     contact_info: str
 
-class Participant(BaseModel):
-    id: int
+class ParticipantScheme(BaseModelScheme):
     event_id: int
     name: str
     email: str
     registration_date: datetime
     payment_status: bool
 
-class BudgetItem(BaseModel):
-    id: int
+class BudgetItemScheme(BaseModelScheme):
     event_id: int
     name: str
     amount: float
     category: str
     is_expense: bool
+
+
